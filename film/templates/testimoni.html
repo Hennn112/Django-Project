@@ -1,0 +1,85 @@
+{% load static %}
+<!-- Section Title -->
+<div class="container section-title" data-aos="fade-up">
+    <button class="load-more-btn align-center" onclick="showTable()">Lihat Semua Ulasan</button>
+    <h2>Ulasan Terbaru</h2>
+  </div><!-- End Section Title -->
+
+  <div class="container" data-aos="fade-up">
+    <div class="row justify-content-center">
+      <div class="col-lg-7">
+        <div class="swiper init-swiper">
+          <script type="application/json" class="swiper-config">
+            {
+              "loop": true,
+              "speed": 600,
+              "autoplay": {
+                "delay": 5000
+              },
+              "slidesPerView": "auto",
+              "pagination": {
+                "el": ".swiper-pagination",
+                "type": "bullets",
+                "clickable": true
+              },
+              "breakpoints": {
+                "320": {
+                  "slidesPerView": 1,
+                  "spaceBetween": 40
+                },
+                "1200": {
+                  "slidesPerView": 1,
+                  "spaceBetween": 1
+                }
+              }
+            }
+          </script>
+          <div class="swiper-wrapper">
+            {% for review in reviews|slice:":3" %}
+              <div class="swiper-slide">
+                <div class="testimonial mx-auto">
+                  <figure class="img-wrap">
+                    <img src="{% static 'assets/img/testimonials/testimonials-1.jpg' %}" alt="Image" class="img-fluid">
+                  </figure>
+                  <h3 class="name">{{ review.nama_pengunjung }} | {{ review.film.judul }}</h3>
+                  <blockquote>
+                    <p>
+                      “{{review.isi_komentar}}”
+                    </p>
+                  </blockquote>
+                </div>
+              </div>
+            {% endfor %}
+          </div>
+          <div class="swiper-pagination"></div>
+        </div>
+      </div>
+      <div class="container mt-4" id="table-ulasan">
+        <h2 class="text-center mb-4">Daftar Ulasan</h2>
+        <table class="table table-bordered table-striped">
+            <thead class="thead-dark">
+                <tr>
+                    <th>#</th>
+                    <th>Nama Pengunjung</th>
+                    <th>Judul Film</th>
+                    <th>Ulasan</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for review in reviews %}
+                    <tr>
+                        <td>{{ forloop.counter }}</td>
+                        <td>{{ review.nama_pengunjung }}</td>
+                        <td>{{ review.film.judul }}</td>
+                        <td>{{ review.isi_komentar }}</td>
+                    </tr>
+                {% empty %}
+                    <tr>
+                        <td colspan="4" class="text-center">Belum ada ulasan.</td>
+                    </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+      </div>
+    </div>
+  </div>

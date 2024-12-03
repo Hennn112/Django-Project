@@ -1,0 +1,65 @@
+<!-- Section Title -->
+{% load static %}
+{% load custom_filters %}
+<div class="container section-title d-flex align-items-center justify-content-between" data-aos="fade-up">
+  <div>
+      <p>Recent Movie</p>
+      <h2>Postingan Film</h2>
+  </div>
+  <div class="d-flex align-items-center">
+    <!-- Form Search -->
+    <form class="d-flex align-items-center" action="{% url 'home' %}" method="GET">
+        <!-- Input Search -->
+        <input type="text" name="query" class="form-control me-2" placeholder="Search..." style="width: 200px;">
+
+        <!-- Dropdown Genre -->
+        <select name="genre" class="form-select me-2" style="width: 150px;">
+            <option value="">All Genres</option>
+            <option value="Action">Action</option>
+            <option value="Drama">Drama</option>
+            <option value="Sci-Fi">Sci-Fi</option>
+            <option value="Romance">Romance</option>
+            <option value="Thriller">Thriller</option>
+        </select>
+
+        <!-- Submit Button -->
+        <button type="submit" class="btn btn-primary">Search</button>
+    </form>
+  </div>
+</div>
+<!-- Film yang ditampilkan -->
+<div class="container">
+  <div class="row gy-4" id="movie-list">
+    {% for movie in movies|slice:":3" %}
+      <div class="col-md-6 col-lg-4">
+        <div class="post-entry" data-aos="fade-up" data-aos-delay="100">
+          <a href="{% url 'detail' movie.id %}" class="thumb d-block">
+            <img src="{{ movie.poster.url }}" alt="Image" class="img-fluid rounded" style="width: 300px; height: 400px; object-fit: cover;">
+          </a>
+          <div class="post-content">
+            <div class="meta">
+              <a href="#" class="cat">{{ movie.genre }}</a> •
+              <span class="date">{{ movie.tahun_rilis }}</span>
+            </div>
+            <h3><a href="{% url 'detail' movie.id %}">{{ movie.judul }}</a></h3>
+            <p>{{ movie.sinopsis|truncate_words:16 }}...</p>
+            <div class="d-flex author align-items-center">
+              <div class="pic">
+                <img src="{% static 'assets/img/team/team-3.jpg' %}" alt="Image" class="img-fluid rounded-circle">
+              </div>
+              <div class="author-name">
+                <strong class="d-block">{{ movie.sutradara }}</strong>
+                <span class="">{{ movie.pemeran }}</span>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    {% endfor %}
+  </div>
+  <!-- Tombol Load More -->
+  {% if movies|length > 3 %}
+    <button id="load-more" data-aos="fade-up" class="load-more-btn align-center" onclick="loadMore()">Tampilkan Selengkapnya</button>
+  {% endif %}
+
+</div>

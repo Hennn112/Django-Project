@@ -1,0 +1,90 @@
+{% extends 'base.html' %} {% block content %} {% load static %} 
+{% load custom_filters %}
+<!-- About 2 Section -->
+<section id="about-2" class="about-2 section">
+  <div class="container">
+    <div class="content">
+      <div class="row justify-content-center">
+        <div
+          class="col-sm-12 col-md-5 col-lg-4 col-xl-4 order-lg-2 offset-xl-1 mb-4"
+        >
+          <div
+            class="img-wrap text-center text-md-left"
+            data-aos="fade-up"
+            data-aos-delay="100"
+          >
+            <div class="img">
+              <img
+                src="{{ movie.poster.url }}"
+                alt="circle image"
+                class="img-fluid movie-poster-detail"
+              />
+            </div>
+          </div>
+        </div>
+
+        <div
+          class="offset-md-0 offset-lg-1 col-sm-12 col-md-5 col-lg-5 col-xl-4"
+          data-aos="fade-up"
+        >
+          <div class="px-3">
+            <span class="content-subtitle">{{ movie.tahun_rilis}}</span>
+            <h2 class="content-title text-start">{{movie.judul}}</h2>
+            <p class="lead">{{ movie.sinopsis|truncate_words:16}}</p>
+            <p class="mb-5">{{ movie.sinopsis|next_word:16}}</p>
+            <p>
+              <button onclick="showForm()" class="btn-get-started">
+                Berikan Ulasan
+              </button>
+            </p>
+          </div>
+        </div>
+      </div>
+
+      <!-- Form untuk komentar -->
+      <form method="POST" action="{% url 'detail' movie.id %}" id="form-ulasan">
+        {% csrf_token %}
+
+        <div class="form-group">
+          <label for="nama_pengunjung">Nama Pengunjung</label>
+          <input
+            type="text"
+            class="form-control"
+            id="nama_pengunjung"
+            name="nama_pengunjung"
+            required
+            placeholder="Masukkan nama Anda"
+          />
+        </div>
+
+        <div class="form-group">
+          <label for="isi_komentar">Isi Komentar</label>
+          <textarea
+            class="form-control"
+            id="isi_komentar"
+            name="isi_komentar"
+            rows="4"
+            required
+            placeholder="Tulis komentar Anda..."
+          ></textarea>
+        </div>
+
+        <button type="submit" class="btn btn-primary">Kirim Ulasan</button>
+      </form>
+    </div>
+  </div>
+</section>
+<!-- /About 2 Section -->
+{% endblock content %}
+
+{% block extra_js %}
+    <script>
+        function showForm() {
+            $("#form-ulasan").show();
+        }
+        $(document).ready(function () {
+            $("#form-ulasan").hide();
+        });
+    </script>
+{% endblock extra_js %}
+    

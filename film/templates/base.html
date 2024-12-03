@@ -1,0 +1,199 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="utf-8">
+  <meta content="width=device-width, initial-scale=1.0" name="viewport">
+  <title>Movie Overview</title>
+  <meta name="description" content="">
+  <meta name="keywords" content="">
+
+  <!-- Favicons -->
+  <link href="{% static 'assets/img/logo.png' %}" rel="icon">
+  <link href="{% static 'assets/img/apple-touch-icon.png' %}" rel="apple-touch-icon">
+
+  <!-- Fonts -->
+  <link href="https://fonts.googleapis.com" rel="preconnect">
+  <link href="https://fonts.gstatic.com" rel="preconnect" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Roboto:ital,wght@0,100;0,300;0,400;0,500;0,700;0,900;1,100;1,300;1,400;1,500;1,700;1,900&family=Lato:ital,wght@0,100;0,300;0,400;0,700;0,900;1,100;1,300;1,400;1,700;1,900&display=swap" rel="stylesheet">
+
+  <!-- Vendor CSS Files -->
+  <link href="{% static 'assets/vendor/bootstrap/css/bootstrap.min.css' %}" rel="stylesheet">
+  <link href="{% static 'assets/vendor/bootstrap-icons/bootstrap-icons.css' %}" rel="stylesheet">
+  <link href="{% static 'assets/vendor/aos/aos.css' %}" rel="stylesheet">
+  <link href="{% static 'assets/vendor/swiper/swiper-bundle.min.css' %}" rel="stylesheet">
+
+  <!-- Main CSS File -->
+  <link href="{% static 'assets/css/main.css' %}" rel="stylesheet">
+  <style>
+    .load-more-btn {
+      background: none;          /* Tidak ada latar belakang */
+      border: none;              /* Hilangkan border */
+      color: #007bff;            /* Warna teks biru */
+      font-size: 16px;           /* Ukuran font */
+      text-decoration: underline; /* Membuat teks bergaris bawah */
+      cursor: pointer;          /* Menambahkan cursor pointer saat hover */
+      padding: 0;                /* Menghapus padding */
+      margin-top: 20px;          /* Jarak atas */
+    }
+    .swiper-slide {
+      display: flex;
+      justify-content: center; /* Memastikan gambar berada di tengah secara horizontal */
+      align-items: center; /* Memastikan gambar berada di tengah secara vertikal */
+      width: 33.33%; /* Pastikan ini sesuai dengan jumlah gambar per slide */
+    }
+    .movie-poster {
+      width: 40%; /* Agar gambar memenuhi lebar container */
+      object-fit: cover; /* Agar gambar tetap terjaga proporsinya */
+    }
+    .movie-poster-detail {
+      width: 100%; /* Agar gambar memenuhi lebar container */
+      object-fit: cover; /* Agar gambar tetap terjaga proporsinya */
+    }
+    
+  </style>
+  <!-- =======================================================
+  * Template Name: Active
+  * Template URL: https://bootstrapmade.com/active-bootstrap-website-template/
+  * Updated: Aug 07 2024 with Bootstrap v5.3.3
+  * Author: BootstrapMade.com
+  * License: https://bootstrapmade.com/license/
+  ======================================================== -->
+</head>
+
+<body class="index-page">
+
+  <header id="header" class="header d-flex align-items-center sticky-top">
+    <div class="container-fluid container-xl position-relative d-flex align-items-center justify-content-between">
+
+      <a href="index.html" class="logo d-flex align-items-center">
+        <!-- Uncomment the line below if you also wish to use an image logo -->
+        <img src="{% static 'assets/img/logo.png' %}" alt="">
+        <h1 class="sitename">Movie Review.</h1>
+      </a>
+
+      <nav id="navmenu" class="navmenu">
+        <ul>
+          <li><a href="/" class="active">Home</a></li>
+        </ul>
+        <i class="mobile-nav-toggle d-xl-none bi bi-list"></i>
+      </nav>
+    </div>
+  </header>
+  <main class="main">
+
+    <!-- About Section -->
+    {% block content %}
+        
+    {% endblock content %}
+
+    <!-- Blog Posts Section -->
+    <section id="blog-posts" class="blog-posts section">
+      {% include 'post.html' %}
+    </section><!-- /Blog Posts Section -->
+
+    <!-- Testimonials Section -->
+    <section id="testimonials" class="testimonials section">
+        {% include 'testimoni.html' %}
+    </section><!-- /Testimonials Section -->
+
+  </main>
+
+  <footer id="footer" class="footer light-background">
+    <div class="container">
+      <div class="copyright d-flex flex-column flex-md-row align-items-center justify-content-md-between">
+        <p>© <span>Copyright</span> <strong class="px-1 sitename">Active.</strong> <span>All Rights Reserved</span></p>
+      </div>
+    </div>
+  </footer>
+
+  <!-- Scroll Top -->
+  <a href="#" id="scroll-top" class="scroll-top d-flex align-items-center justify-content-center"><i class="bi bi-arrow-up-short"></i></a>
+
+  <!-- Preloader -->
+  <div id="preloader"></div>
+
+  <!-- Vendor JS Files -->
+  <script src="{% static 'assets/vendor/bootstrap/js/bootstrap.bundle.min.js' %}"></script>
+  <script src="{% static 'assets/vendor/aos/aos.js' %}"></script>
+  <script src="{% static 'assets/vendor/swiper/swiper-bundle.min.js' %}"></script>
+  <script src="{% static 'assets/vendor/jquery/jquery-3.7.1.min.js' %}"></script>
+  <!-- Main JS File -->
+  <script src="{% static 'assets/js/main.js' %}"></script>
+  <script>
+    function truncateText(text, wordLimit) {
+        const words = text.split(" ");
+        if (words.length > wordLimit) {
+            return words.slice(0, wordLimit).join(" ") + "...";
+        }
+        return text;
+    }
+    
+    let offset = 3;  // Mulai dari data ke-4
+    let limit = 3;   // Menambahkan 3 data tiap kali tombol diklik
+
+    function loadMore() {
+      // Mengirim permintaan AJAX untuk memuat data lebih lanjut
+      fetch(`/load-more/?offset=${offset}&limit=${limit}`)
+        .then(response => response.json())
+        .then(data => {
+          // Menambahkan data baru ke dalam DOM
+          const movieList = document.getElementById('movie-list');
+          data.movies.forEach(movie => {
+            const truncatedSinopsis = truncateText(movie.sinopsis, 16);
+            const movieElement = document.createElement('div');
+            movieElement.classList.add('col-md-6', 'col-lg-4', 'movie-item');
+            movieElement.innerHTML = `
+                <div class="post-entry" data-aos="fade-up" data-aos-delay="100">
+                    <a href="${movie.detail_url}" class="thumb d-block">
+                        <img src="${movie.poster_url}" alt="Image" class="img-fluid rounded" style="width: 300px; height: 400px; object-fit: cover;">
+                    </a>
+                    <div class="post-content">
+                        <div class="meta">
+                            <a href="#" class="cat">${movie.genre}</a> •
+                            <span class="date">${movie.tahun_rilis}</span>
+                        </div>
+                        <h3><a href="${movie.detail_url}">${movie.judul}</a></h3>
+                        <p>${truncatedSinopsis}</p>
+                        <div class="d-flex author align-items-center">
+                            <div class="pic">
+                                <img src="${movie.sutradara_image}" alt="Image" class="img-fluid rounded-circle">
+                            </div>
+                            <div class="author-name">
+                                <strong class="d-block">${movie.sutradara}</strong>
+                                <span>${movie.pemeran}</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            `;
+            movieList.appendChild(movieElement);
+          });
+
+          // Update offset
+          offset += limit;
+
+          // Jika sudah tidak ada data, sembunyikan tombol
+          if (data.movies.length < limit) {
+              document.getElementById('load-more').style.display = 'none';
+          }
+        })
+        .catch(error => {
+            console.error('Error loading more movies:',error);
+            console.log(error)
+        });
+    }
+    function showTable() {
+        $("#table-ulasan").show();
+    }
+    $(document).ready(function () {
+      $("#table-ulasan").hide();
+    });
+  </script>
+  {% block extra_js %}
+    
+  {% endblock extra_js %}
+</body>
+
+</html>
